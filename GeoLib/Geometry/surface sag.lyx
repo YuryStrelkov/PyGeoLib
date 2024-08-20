@@ -1,0 +1,1025 @@
+#LyX 2.3 created this file. For more info see http://www.lyx.org/
+\lyxformat 544
+\begin_document
+\begin_header
+\save_transient_properties true
+\origin unavailable
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman "default" "default"
+\font_sans "default" "default"
+\font_typewriter "default" "default"
+\font_math "auto" "auto"
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100 100
+\font_tt_scale 100 100
+\use_microtype false
+\use_dash_ligatures true
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\use_minted 0
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 1cm
+\topmargin 1cm
+\rightmargin 1cm
+\bottommargin 1cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\is_math_indent 0
+\math_numbering_side default
+\quotes_style english
+\dynamic_quotes 0
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\begin{array}{c}
+x-d_{x}\\
+y-d_{y}\\
+z-d_{z}
+\end{array}\right)^{T}\left(\begin{array}{ccc}
+a_{11} & a_{12} & a_{13}\\
+a_{21} & a_{22} & a_{23}\\
+a_{31} & a_{32} & a_{33}
+\end{array}\right)\left(\begin{array}{c}
+x-d_{x}\\
+y-d_{y}\\
+z-d_{z}
+\end{array}\right)+\left(\left(\begin{array}{c}
+x-d_{x}\\
+y-d_{y}\\
+z-d_{z}
+\end{array}\right)^{T},\left(\begin{array}{c}
+b_{x}\\
+b_{y}\\
+b_{z}
+\end{array}\right)\right)+k=0
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\left(\begin{array}{c}
+x-d_{x}\\
+y-d_{y}\\
+z-d_{z}
+\end{array}\right)^{T}\left(\begin{array}{c}
+\left(x-d_{x}\right)a_{11}+\left(y-d_{y}\right)a_{12}+\left(z-d_{z}\right)a_{13}\\
+\left(x-d_{x}\right)a_{21}+\left(y-d_{y}\right)a_{22}+\left(z-d_{z}\right)a_{23}\\
+\left(x-d_{x}\right)a_{31}+\left(y-d_{y}\right)a_{32}+\left(z-d_{z}\right)a_{33}
+\end{array}\right)+\left(x-d_{x}\right)b_{x}+\left(y-d_{y}\right)b_{y}+\left(z-d_{z}\right)b_{z}+k=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\begin{array}{c}
+\left(x-d_{x}\right)\left(\left(x-d_{x}\right)a_{11}+\left(y-d_{y}\right)a_{12}+\left(z-d_{z}\right)a_{13}\right)+\\
+\left(y-d_{y}\right)\left(\left(x-d_{x}\right)a_{21}+\left(y-d_{y}\right)a_{22}+\left(z-d_{z}\right)a_{23}\right)+\\
+\left(z-d_{z}\right)\left(\left(x-d_{x}\right)a_{31}+\left(y-d_{y}\right)a_{32}+\left(z-d_{z}\right)a_{33}\right)+
+\end{array}\right)+\left(x-d_{x}\right)b_{x}+\left(y-d_{y}\right)b_{y}+\left(z-d_{z}\right)b_{z}+k=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(x-d_{x}\right)\left(\left(x-d_{x}\right)a_{11}+\left(y-d_{y}\right)a_{12}+\left(z-d_{z}\right)a_{13}\right)=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\left(x^{2}-2xd_{x}+d_{x}^{2}\right)a_{11}+\left(xy-yd_{x}-xd_{y}+d_{x}d_{y}\right)a_{12}+\left(xz-zd_{x}-xd_{z}+d_{x}d_{z}\right)a_{13}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(y-d_{y}\right)\left(\left(x-d_{x}\right)a_{21}+\left(y-d_{y}\right)a_{22}+\left(z-d_{z}\right)a_{23}\right)=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\left(y^{2}-2yd_{y}+d_{y}^{2}\right)a_{22}+\left(xy-yd_{x}-xd_{y}+d_{x}d_{y}\right)a_{21}+\left(yz-zd_{y}-yd_{z}+d_{y}d_{z}\right)a_{23}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(z-d_{z}\right)\left(\left(x-d_{x}\right)a_{31}+\left(y-d_{y}\right)a_{32}+\left(z-d_{z}\right)a_{33}\right)=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\left(xz-zd_{x}-xd_{z}+d_{x}d_{z}\right)a_{31}+\left(yz-zd_{y}-yd_{z}+d_{y}d_{z}\right)a_{32}+\left(z^{2}-2zd_{z}+d_{z}^{2}\right)a_{33}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\begin{array}{c}
+\left(x-d_{x}\right)\left(\left(x-d_{x}\right)a_{11}+\left(y-d_{y}\right)a_{12}+\left(z-d_{z}\right)a_{13}\right)+\\
+\left(y-d_{y}\right)\left(\left(x-d_{x}\right)a_{21}+\left(y-d_{y}\right)a_{22}+\left(z-d_{z}\right)a_{23}\right)+\\
+\left(z-d_{z}\right)\left(\left(x-d_{x}\right)a_{31}+\left(y-d_{y}\right)a_{32}+\left(z-d_{z}\right)a_{33}\right)+
+\end{array}\right)=
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+=\left(x^{2}-2xd_{x}+d_{x}^{2}\right)a_{11}+\left(y^{2}-2yd_{y}+d_{y}^{2}\right)a_{22}+\left(z^{2}-2zd_{z}+d_{z}^{2}\right)a_{33}+
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
++2\left(xy-yd_{x}-xd_{y}+d_{x}d_{y}\right)a_{12}+2\left(xz-zd_{x}-xd_{z}+d_{x}d_{z}\right)a_{13}+2\left(yz-zd_{y}-yd_{z}+d_{y}d_{z}\right)a_{23}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Всё, что не зависит от z:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+M=\left(x^{2}-2xd_{x}+d_{x}^{2}\right)a_{11}+\left(y^{2}-2yd_{y}+d_{y}^{2}\right)a_{22}+2\left(xy-yd_{x}-xd_{y}+d_{x}d_{y}\right)a_{12}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Итого:
+\begin_inset Formula 
+\[
+\left(z^{2}-2zd_{z}+d_{z}^{2}\right)a_{33}+2\left(xz-zd_{x}-xd_{z}+d_{x}d_{z}\right)a_{13}+2\left(yz-zd_{y}-yd_{z}+d_{y}d_{z}\right)a_{23}+M=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Далее:
+\begin_inset Formula 
+\[
+\left(a_{33}z^{2}-2a_{33}d_{z}z+a_{33}d_{z}^{2}\right)+2xza_{13}-2zd_{x}a_{13}-2xd_{z}a_{13}+2a_{13}d_{x}d_{z}+\left(2yza_{23}-2zd_{y}a_{23}-2yd_{z}a_{23}+2d_{y}d_{z}a_{23}\right)+M=0
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+a_{33}z^{2}-2a_{33}d_{z}z+2xza_{13}-2zd_{x}a_{13}+2yza_{23}-2zd_{y}a_{23}+a_{33}d_{z}^{2}-2xd_{z}a_{13}+2a_{13}d_{x}d_{z}-2yd_{z}a_{23}+2d_{y}d_{z}a_{23}+M=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a_{33}z^{2}-2z\left(a_{33}d_{z}+xa_{13}-d_{x}a_{13}+ya_{23}-d_{y}a_{23}\right)+a_{33}d_{z}^{2}-2xd_{z}a_{13}+2a_{13}d_{x}d_{z}-2yd_{z}a_{23}+2d_{y}d_{z}a_{23}+M=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Итого имеем квадратное уравнение:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a_{33}z^{2}-2z\left(a_{33}d_{z}+xa_{13}-d_{x}a_{13}+ya_{23}-d_{y}a_{23}\right)+a_{33}d_{z}^{2}-2xd_{z}a_{13}+2a_{13}d_{x}d_{z}-
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+-2yd_{z}a_{23}+2d_{y}d_{z}a_{23}+M+\left(x-d_{x}\right)b_{x}+\left(y-d_{y}\right)b_{y}+\left(z-d_{z}\right)b_{z}+k=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Если вектор D равен нулю:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+M=\left(x^{2}\right)a_{11}+\left(y^{2}\right)a_{22}+2\left(xy\right)a_{12}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a_{33}z^{2}-2z\left(xa_{13}+ya_{23}\right)+M+\left(x-d_{x}\right)b_{x}+\left(y-d_{y}\right)b_{y}+\left(z-d_{z}\right)b_{z}+k=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a_{33}z^{2}-2z\left(xa_{13}+ya_{23}\right)+M+xb_{x}+yb_{y}+zb_{z}+k=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a_{33}z^{2}-2z\left(xa_{13}+ya_{23}\right)+x^{2}a_{11}+y^{2}a_{22}+2xya_{12}+xb_{x}+yb_{y}+zb_{z}+k=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+a_{33}z^{2}-2z\left(xa_{13}+ya_{23}+\frac{1}{2}b_{z}\right)+x^{2}a_{11}+y^{2}a_{22}+2xya_{12}+xb_{x}+yb_{y}+k=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+A=a_{33}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+B=-2\left(xa_{13}+ya_{23}+\frac{1}{2}b_{z}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+C=x^{2}a_{11}+y^{2}a_{22}+2xya_{12}+xb_{x}+yb_{y}+k
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Параболоид
+\series default
+ 
+\begin_inset Formula 
+\[
+\frac{x^{2}}{a^{2}}+\frac{y^{2}}{b^{2}}-2z=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+координаты:
+\begin_inset Formula 
+\[
+x_{i}=\rho_{i}+e_{i}t
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\rho_{x}^{2}+2\rho_{x}e_{x}t+e_{x}^{2}t^{2}}{a^{2}}+\frac{\rho_{y}^{2}+2\rho_{x}e_{y}t+e_{y}^{2}t^{2}}{b^{2}}-2\left(\rho_{z}+e_{z}t\right)=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\rho_{x}^{2}}{a^{2}}+\frac{2\rho_{x}e_{x}t}{a^{2}}+\frac{e_{x}^{2}t^{2}}{a^{2}}+\frac{\rho_{y}^{2}}{b^{2}}+\frac{2\rho_{y}e_{y}t}{b^{2}}+\frac{e_{y}^{2}t^{2}}{b^{2}}-2\rho_{z}-2e_{z}t=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{e_{x}^{2}t^{2}}{a^{2}}+\frac{e_{y}^{2}t^{2}}{b^{2}}+\frac{2\rho_{x}e_{x}t}{a^{2}}+\frac{2\rho_{y}e_{y}t}{b^{2}}-2e_{z}t-2\rho_{z}+\frac{\rho_{y}^{2}}{b^{2}}+\frac{\rho_{x}^{2}}{a^{2}}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\frac{e_{x}^{2}}{a^{2}}+\frac{e_{y}^{2}}{b^{2}}\right)t^{2}+2\left(\frac{\rho_{x}e_{x}}{a^{2}}+\frac{\rho_{y}e_{y}}{b^{2}}-e_{z}\right)t+\frac{\rho_{y}^{2}}{b^{2}}+\frac{\rho_{x}^{2}}{a^{2}}-2\rho_{z}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+A=\left(\frac{e_{x}^{2}}{a^{2}}+\frac{e_{y}^{2}}{b^{2}}\right),B=2\left(\frac{\rho_{x}e_{x}}{a^{2}}+\frac{\rho_{y}e_{y}}{b^{2}}-e_{z}\right),C=\frac{\rho_{y}^{2}}{b^{2}}+\frac{\rho_{x}^{2}}{a^{2}}-2\rho_{z}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Двуполосный гиперболоид
+\begin_inset Formula 
+\[
+\frac{x^{2}}{a^{2}}+\frac{y^{2}}{b^{2}}-\frac{z^{2}}{c^{2}}=-1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+координаты:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x_{i}=\rho_{i}+e_{i}t
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\rho_{x}^{2}+2\rho_{x}e_{x}t+e_{x}^{2}t^{2}}{a^{2}}+\frac{\rho_{y}^{2}+2\rho_{y}e_{y}t+e_{y}^{2}t^{2}}{b^{2}}-\frac{\rho_{z}^{2}+2\rho_{z}e_{z}t+e_{z}^{2}t^{2}}{b^{2}}=-1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\rho_{x}^{2}}{a^{2}}+\frac{2\rho_{x}e_{x}t}{a^{2}}+\frac{e_{x}^{2}t^{2}}{a^{2}}+\frac{\rho_{y}^{2}}{b^{2}}+\frac{2\rho_{y}e_{y}t}{b^{2}}+\frac{e_{y}^{2}t^{2}}{b^{2}}-\frac{\rho_{z}^{2}}{c^{2}}-\frac{2\rho_{z}e_{z}t}{c^{2}}-\frac{e_{z}^{2}t^{2}}{c^{2}}=-1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{e_{x}^{2}t^{2}}{a^{2}}+\frac{e_{y}^{2}t^{2}}{b^{2}}-\frac{e_{z}^{2}t^{2}}{c^{2}}+\frac{2\rho_{x}e_{x}t}{a^{2}}+\frac{2\rho_{y}e_{y}t}{b^{2}}-\frac{2\rho_{z}e_{z}t}{c^{2}}+\frac{\rho_{x}^{2}}{a^{2}}+\frac{\rho_{y}^{2}}{b^{2}}-\frac{\rho_{z}^{2}}{c^{2}}=-1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\frac{e_{x}^{2}}{a^{2}}+\frac{e_{y}^{2}}{b^{2}}-\frac{e_{z}^{2}}{c^{2}}\right)t^{2}+2\left(\frac{\rho_{x}e_{x}}{a^{2}}+\frac{\rho_{y}e_{y}}{b^{2}}-\frac{\rho_{z}e_{z}}{c^{2}}\right)t+\frac{\rho_{x}^{2}}{a^{2}}+\frac{\rho_{y}^{2}}{b^{2}}-\frac{\rho_{z}^{2}}{c^{2}}+1=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+A=\left(\frac{e_{x}^{2}}{a^{2}}+\frac{e_{y}^{2}}{b^{2}}-\frac{e_{z}^{2}}{c^{2}}\right),B=2\left(\frac{\rho_{x}e_{x}}{a^{2}}+\frac{\rho_{y}e_{y}}{b^{2}}-\frac{\rho_{z}e_{z}}{c^{2}}\right),C=\frac{\rho_{x}^{2}}{a^{2}}+\frac{\rho_{y}^{2}}{b^{2}}-\frac{\rho_{z}^{2}}{c^{2}}+1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Эллипсоид:
+\begin_inset Formula 
+\[
+\frac{x^{2}}{a^{2}}+\frac{y^{2}}{b^{2}}+\frac{z^{2}}{c^{2}}=1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+координаты:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x_{i}=\rho_{i}+e_{i}t
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+A=\left(\frac{e_{x}^{2}}{a^{2}}+\frac{e_{y}^{2}}{b^{2}}+\frac{e_{z}^{2}}{c^{2}}\right),B=2\left(\frac{\rho_{x}e_{x}}{a^{2}}+\frac{\rho_{y}e_{y}}{b^{2}}+\frac{\rho_{z}e_{z}}{c^{2}}\right),C=\frac{\rho_{x}^{2}}{a^{2}}+\frac{\rho_{y}^{2}}{b^{2}}+\frac{\rho_{z}^{2}}{c^{2}}-1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Сфера:
+\begin_inset Formula 
+\[
+\frac{x^{2}}{R^{2}}+\frac{y^{2}}{R^{2}}+\frac{z^{2}}{R^{2}}=1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+координаты:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x_{i}=\rho_{i}+e_{i}t
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+A=\frac{1}{R^{2}}\left(e_{x}^{2}+e_{y}^{2}+e_{z}^{2}\right),B=\frac{2}{R^{2}}\left(\rho_{x}e_{x}+\rho_{y}e_{y}+\rho_{z}e_{z}\right),C=\frac{1}{R^{2}}\left(\rho_{x}^{2}+\rho_{y}^{2}+\rho_{z}^{2}\right)-1
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Конус:
+\series default
+
+\begin_inset Formula 
+\[
+\frac{x^{2}}{a^{2}}+\frac{y^{2}}{b^{2}}-z^{2}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+координаты:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x_{i}=\rho_{i}+e_{i}t
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\rho_{x}^{2}+2\rho_{x}e_{x}t+e_{x}^{2}t^{2}}{a^{2}}+\frac{\rho_{y}^{2}+2\rho_{y}e_{y}t+e_{y}^{2}t^{2}}{b^{2}}-\rho_{z}^{2}-2\rho_{z}e_{z}t-e_{z}^{2}t^{2}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\frac{\rho_{x}^{2}}{a^{2}}+\frac{2\rho_{x}e_{x}t}{a^{2}}+\frac{e_{x}^{2}t^{2}}{a^{2}}+\frac{\rho_{y}^{2}}{b^{2}}+\frac{2\rho_{y}e_{y}t}{b^{2}}+\frac{e_{y}^{2}t^{2}}{b^{2}}-\rho_{z}^{2}-2\rho_{z}e_{z}t-e_{z}^{2}t^{2}=0
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\frac{e_{x}^{2}t^{2}}{a^{2}}+\frac{e_{y}^{2}t^{2}}{b^{2}}-e_{z}^{2}t^{2}+\frac{2\rho_{x}e_{x}t}{a^{2}}+\frac{2\rho_{y}e_{y}t}{b^{2}}-2\rho_{z}e_{z}t+\frac{\rho_{x}^{2}}{a^{2}}+\frac{\rho_{y}^{2}}{b^{2}}-\rho_{z}^{2}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\frac{e_{x}^{2}}{a^{2}}+\frac{e_{y}^{2}}{b^{2}}-e_{z}^{2}\right)t^{2}+2\left(\frac{\rho_{x}e_{x}}{a^{2}}+\frac{\rho_{y}e_{y}}{b^{2}}-\rho_{z}e_{z}\right)t+\frac{\rho_{x}^{2}}{a^{2}}+\frac{\rho_{y}^{2}}{b^{2}}-\rho_{z}^{2}=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+A=\left(\frac{e_{x}^{2}}{a^{2}}+\frac{e_{y}^{2}}{b^{2}}-e_{z}^{2}\right),B=2\left(\frac{\rho_{x}e_{x}}{a^{2}}+\frac{\rho_{y}e_{y}}{b^{2}}-\rho_{z}e_{z}\right),C=\frac{\rho_{x}^{2}}{a^{2}}+\frac{\rho_{y}^{2}}{b^{2}}-\rho_{z}^{2}
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\vec{x}^{T}A\vec{x}+2\left(\vec{b},\vec{x}\right)+k=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\vec{x}=\vec{\rho}+\vec{e}t
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\vec{x}^{T}A\vec{x}+2\left(\vec{b},\vec{x}\right)+k=0
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\left(\vec{\rho}+\vec{e}t\right)^{T}A\left(\vec{\rho}+\vec{e}t\right)+\left(\vec{b},\vec{\rho}+\vec{e}t\right)+k=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\vec{\rho}+\vec{e}t\right)^{T}\left(A\vec{\rho}+A\vec{e}t\right)+\left(\vec{\rho},\vec{b}\right)+\left(\vec{e},\vec{b}\right)t+k=0
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+\left(\vec{\rho}^{T}A\vec{\rho}+\vec{\rho}^{T}A\vec{e}t+\vec{e}^{T}A\vec{\rho}t+\vec{e}^{T}A\vec{e}t^{2}\right)+\left(\vec{\rho},\vec{b}\right)+\left(\vec{e},\vec{b}\right)t+k=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\vec{e}^{T}A\vec{e}t^{2}+\left(\vec{\rho}^{T}A\vec{e}+\vec{e}^{T}A\vec{\rho}+\left(\vec{e},\vec{b}\right)\right)t+\vec{\rho}^{T}A\vec{\rho}+\left(\vec{\rho},\vec{b}\right)+k=0
+\]
+
+\end_inset
+
+
+\begin_inset Formula 
+\[
+a=\vec{e}^{T}A\vec{e}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+b=\vec{\rho}^{T}A\vec{e}+\vec{e}^{T}A\vec{\rho}+\left(\vec{e},\vec{b}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+c=\vec{\rho}^{T}A\vec{\rho}+\left(\vec{\rho},\vec{b}\right)+k
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+Подъём поверхности
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\begin{array}{c}
+x\\
+y\\
+z
+\end{array}\right)^{T}\left(\begin{array}{ccc}
+a_{11} & a_{12} & a_{13}\\
+a_{21} & a_{22} & a_{23}\\
+a_{31} & a_{32} & a_{33}
+\end{array}\right)\left(\begin{array}{c}
+x\\
+y\\
+z
+\end{array}\right)+\left(\left(\begin{array}{c}
+x\\
+y\\
+z
+\end{array}\right)^{T},\left(\begin{array}{c}
+b_{x}\\
+b_{y}\\
+b_{z}
+\end{array}\right)\right)+k=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\begin{array}{c}
+x\\
+y\\
+z
+\end{array}\right)^{T}\left(\begin{array}{c}
+xa_{11}+ya_{12}+za_{13}\\
+xa_{21}+ya_{22}+za_{23}\\
+xa_{31}+ya_{32}+za_{33}
+\end{array}\right)+xb_{x}+yb_{y}+zb_{z}+k=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\begin{array}{c}
+x^{2}a_{11}+xya_{12}+xza_{13}+\\
+xya_{21}+y^{2}a_{22}+yza_{23}+\\
+xza_{31}+yza_{32}+z^{2}a_{33}+
+\end{array}\right)+xb_{x}+yb_{y}+zb_{z}+k=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+\left(\begin{array}{c}
+x^{2}a_{11}+2xya_{12}+2xza_{13}+\\
++y^{2}a_{22}+2yza_{23}+\\
++z^{2}a_{33}+
+\end{array}\right)+xb_{x}+yb_{y}+zb_{z}+k=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+x^{2}a_{11}+2xya_{12}+2xza_{13}+y^{2}a_{22}+2yza_{23}+z^{2}a_{33}+xb_{x}+yb_{y}+zb_{z}+k=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+z^{2}a_{33}+zb_{z}+2xza_{13}+2yza_{23}+x^{2}a_{11}+2xya_{12}+y^{2}a_{22}+xb_{x}+yb_{y}+k=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+z^{2}a_{33}+z\left(b_{z}+2xa_{13}+2ya_{23}\right)+x^{2}a_{11}+2xya_{12}+y^{2}a_{22}+xb_{x}+yb_{y}+k=0
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+A=a_{33}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+B=\left(b_{z}+2xa_{13}+2ya_{23}\right)
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+C=x^{2}a_{11}+2xya_{12}+y^{2}a_{22}+xb_{x}+yb_{y}+k
+\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Если 
+\begin_inset Formula $A=0.0$
+\end_inset
+
+:
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula 
+\[
+z=-\frac{x^{2}a_{11}+2xya_{12}+y^{2}a_{22}+xb_{x}+yb_{y}+k}{b_{z}+2xa_{13}+2ya_{23}}=-\frac{C}{B}
+\]
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
