@@ -1,10 +1,10 @@
-from ...Shapes.Curves.bezier import bezier_interpolate_pt_3d, bezier_interpolate_tangent_3d
+from ...Surfaces.Curves.bezier import bezier_interpolate_pt_3d, bezier_interpolate_tangent_3d
 from ...Matrices.matrix4 import Matrix4
 from ...Vectors.vector2 import Vector2
 from ...Vectors.vector3 import Vector3
 from matplotlib import pyplot as plt
 from typing import Iterable, List
-from .shape import Shape
+from .parametric_surface import ParametricSurface
 import numpy as np
 
 
@@ -54,13 +54,13 @@ def _draw_basis(basis: Matrix4, axis=None, axis_length: float = 0.125):
     return axis
 
 
-class BevelShape(Shape):
+class BevelSurface(ParametricSurface):
 
     DIRECTIONS = (Vector3(1.0, 0.0, 0.0), Vector3(0.0, 1.0, 0.0), Vector3(0.0, 0.0, 1.0))
 
     @staticmethod
     def _build_basis(forward: Vector3, origin: Vector3 = None, prev_tbn: Matrix4 = None) -> Matrix4:
-        up = prev_tbn.up if prev_tbn else min(BevelShape.DIRECTIONS, key=lambda v: abs(Vector3.dot(v, forward)))
+        up = prev_tbn.up if prev_tbn else min(BevelSurface.DIRECTIONS, key=lambda v: abs(Vector3.dot(v, forward)))
         right = Vector3.cross(forward, up).normalize()
         up = Vector3.cross(right, forward).normalize()
         return Matrix4.build_transform(right, up, forward, origin)
@@ -68,19 +68,19 @@ class BevelShape(Shape):
     def _build_local_tbn_matrices(self) -> None:
         p1, p2 = self._profile_shape[0], self._profile_shape[1]
         forward = (p2 - p1).normalize()
-        tbn = BevelShape._build_basis(forward, p1)
+        tbn = BevelSurface._build_basis(forward, p1)
         self._tbn_matrices = [tbn]
         for p1, p2 in zip(self._profile_shape[1:-1], self._profile_shape[2:]):
             forward = (p2 - p1).normalize()
             if forward.magnitude < 1e-6:
                 _tbn = tbn
             else:
-                _tbn = BevelShape._build_basis(forward, p1, tbn)
+                _tbn = BevelSurface._build_basis(forward, p1, tbn)
             self._tbn_matrices.append(_tbn)
             tbn = _tbn
         p2, p1 = self._profile_shape[-2], self._profile_shape[-1]
         forward = (p1 - p2).normalize()
-        self._tbn_matrices.append(BevelShape._build_basis(forward, p1, tbn))
+        self._tbn_matrices.append(BevelSurface._build_basis(forward, p1, tbn))
 
     def __init__(self, start_shape: Iterable[Vector3],
                  profile_shape: Iterable[Vector3],

@@ -3,7 +3,7 @@ from ...Vectors.vector2 import Vector2
 from ...Vectors.vector3 import Vector3
 from matplotlib import pyplot as plt
 from typing import Tuple, List
-from .shape import Shape
+from .parametric_surface import ParametricSurface
 
 # https://www.scratchapixel.com/lessons/geometry/bezier-curve-rendering-utah-teapot/bezier-curve.html
 
@@ -129,7 +129,7 @@ PATCH_CONTROL_POINTS = (Vector3(-0.5, 0, -0.5),
                         Vector3(0.5, 0.0, 0.5))
 
 
-class BezierPatch(Shape):
+class BezierSurface(ParametricSurface):
     def __init__(self, points: Tuple[Vector3, ...] = None):
         super().__init__()
         if points:
@@ -149,18 +149,18 @@ class BezierPatch(Shape):
     def control_points(self) -> List[Vector3]:
         return self._controllers
 
-    def normal(self, uv: Vector2) -> Vector3:
-        dpu = (self.point(Vector2(uv.x + NUMERICAL_ACCURACY, uv.y)) -
-               self.point(Vector2(uv.x - NUMERICAL_ACCURACY, uv.y))).normalize()
-        dpv = (self.point(Vector2(uv.x, uv.y + NUMERICAL_ACCURACY)) -
-               self.point(Vector2(uv.x, uv.y - NUMERICAL_ACCURACY))).normalize()
-        return Vector3.cross(dpu, dpv).normalize()
+    # def normal(self, uv: Vector2) -> Vector3:
+    #     dpu = (self.point(Vector2(uv.x + NUMERICAL_ACCURACY, uv.y)) -
+    #            self.point(Vector2(uv.x - NUMERICAL_ACCURACY, uv.y))).normalize()
+    #     dpv = (self.point(Vector2(uv.x, uv.y + NUMERICAL_ACCURACY)) -
+    #            self.point(Vector2(uv.x, uv.y - NUMERICAL_ACCURACY))).normalize()
+    #     return Vector3.cross(dpu, dpv).normalize()
 
     def point(self, uv: Vector2) -> Vector3:
         return cubic_bezier_patch_position(*self._controllers, *uv)
 
-    def surface_orientation(self) -> float:
-        return 1.0
+    # def surface_orientation(self) -> float:
+    #     return 1.0
 
     def draw_shape_gizmos(self, axis=None):
         axis = axis if axis else plt.axes(projection='3d')

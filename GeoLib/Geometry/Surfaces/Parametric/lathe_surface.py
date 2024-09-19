@@ -1,17 +1,16 @@
-from ...Shapes.Curves.bezier import bezier_interpolate_pt_3d
+from ...Surfaces.Curves.bezier import bezier_interpolate_pt_3d
 from ...Transformations.quaternion import Quaternion
 from ...Vectors.vector2 import Vector2
 from ...Vectors.vector3 import Vector3
 from ...common import TWO_PI
-from .shape import Shape
+from .parametric_surface import ParametricSurface
 from typing import List, Tuple, Union
 
 
-class LatheShape(Shape):
+class LatheSurface(ParametricSurface):
     def __init__(self, points: Union[List[Vector3], Tuple[Vector3, ...]]):
         super().__init__()
         self._profile_shape = list(points)
-        self.interpolation_mode = 1
         self._start_angle = 0.0
         self._lathe_angle = TWO_PI
         self._closed = False

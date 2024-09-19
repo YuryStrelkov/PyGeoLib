@@ -1,12 +1,12 @@
 from ..Curves.bezier import BEZIER_CIRCLE_POINTS, BEZIER_ANCHOR_VAL
-from .bevel_shape import BevelShape
+from .bevel_surface import BevelSurface
 from ...Transformations import Transform3d
 from ...Vectors import Vector3, Vector2
-from .bezier_patch import BezierPatch
-from .sphere import Sphere
-from .shape import Shape
-from .helix import Helix
-from .torus import Torus
+from .bezier_surface import BezierSurface
+from .sphere_surface import SphereSurface
+from .parametric_surface import ParametricSurface
+from .helix_surface import HelixSurface
+from .torus_surface import TorusSurface
 from typing import Tuple
 
 PATCH_CONTROL_POINTS = (Vector3(-0.5, 0, -0.5),
@@ -28,14 +28,14 @@ PATCH_CONTROL_POINTS = (Vector3(-0.5, 0, -0.5),
 
 
 def spring_shape(radius1: float = 0.075, radius2: float = 1.0, radius3: float = 0.5,
-                 height: float = 1.75, turns: float = 5.0, resolution=(256, 16)) -> Tuple[Shape, ...]:
-    helix: Helix = Helix(radius1, radius2, height, turns)
-    torus1: Helix = Helix(radius1, radius3, -0.075, -0.5)
-    torus2: Helix = Helix(radius1, radius3, 0.075, 0.5)
+                 height: float = 1.75, turns: float = 5.0, resolution=(256, 16)) -> Tuple[ParametricSurface, ...]:
+    helix: HelixSurface = HelixSurface(radius1, radius2, height, turns)
+    torus1: HelixSurface = HelixSurface(radius1, radius3, -0.075, -0.5)
+    torus2: HelixSurface = HelixSurface(radius1, radius3, 0.075, 0.5)
     torus1.transform.transform_matrix = helix.basis_start
     torus2.transform.transform_matrix = helix.basis_end
-    torus3: Torus = Torus(radius1, radius3, 0.8)
-    torus4: Torus = Torus(radius1, radius3, -0.8)
+    torus3: TorusSurface = TorusSurface(radius1, radius3, 0.8)
+    torus4: TorusSurface = TorusSurface(radius1, radius3, -0.8)
     torus3.transform.transform_matrix = torus2.basis_end
     torus3.transform.angles += Vector3(0.0, 90.0, 0.0)
     torus4.transform.transform_matrix = torus1.basis_end
@@ -49,20 +49,20 @@ def spring_shape(radius1: float = 0.075, radius2: float = 1.0, radius3: float = 
     return helix, torus1, torus2, torus3, torus4
 
 
-def box_shape(radius: float = 1.0) -> Tuple['BezierPatch', ...]:
+def box_shape(radius: float = 1.0) -> Tuple['BezierSurface', ...]:
     side = tuple(Vector3(p.x, 0.5, p.z) * radius for p in PATCH_CONTROL_POINTS)
-    path_side_up = BezierPatch(side)
+    path_side_up = BezierSurface(side)
     transform = Transform3d()
     transform.angles = Vector3(180.0, 0.0, 0.0)
-    path_side_down = BezierPatch(tuple(transform.transform_vect(v, 1.0) for v in side))
+    path_side_down = BezierSurface(tuple(transform.transform_vect(v, 1.0) for v in side))
     transform.angles = Vector3(90.0, 0.0, 0.0)
-    path_side_front = BezierPatch(tuple(transform.transform_vect(v, 1.0) for v in side))
+    path_side_front = BezierSurface(tuple(transform.transform_vect(v, 1.0) for v in side))
     transform.angles = Vector3(-90.0, 0.0, 0.0)
-    path_side_back = BezierPatch(tuple(transform.transform_vect(v, 1.0) for v in side))
+    path_side_back = BezierSurface(tuple(transform.transform_vect(v, 1.0) for v in side))
     transform.angles = Vector3(0.0, 0.0, 90.0)
-    path_side_left = BezierPatch(tuple(transform.transform_vect(v, 1.0) for v in side))
+    path_side_left = BezierSurface(tuple(transform.transform_vect(v, 1.0) for v in side))
     transform.angles = Vector3(0.0, 0.0, -90.0)
-    path_side_right = BezierPatch(tuple(transform.transform_vect(v, 1.0) for v in side))
+    path_side_right = BezierSurface(tuple(transform.transform_vect(v, 1.0) for v in side))
 
     path_side_up.resolution = (3, 3)
     path_side_down.resolution = (3, 3)
@@ -74,18 +74,18 @@ def box_shape(radius: float = 1.0) -> Tuple['BezierPatch', ...]:
     return path_side_up, path_side_down, path_side_front, path_side_back, path_side_left, path_side_right
 
 
-def sphere_shape(radius: float = 1.0) -> Tuple['Shape', ...]:
-    return Sphere(radius=radius, uv0=Vector2(0, 0), uv1=Vector2(0.5, 0.5)), \
-           Sphere(radius=radius, uv0=Vector2(0.5, 0.5), uv1=Vector2(1.0, 1.0)), \
-           Sphere(radius=radius, uv0=Vector2(0.0, 0.5), uv1=Vector2(0.5, 1.0)), \
-           Sphere(radius=radius, uv0=Vector2(0.5, 0.0), uv1=Vector2(1.0, 0.5))
+def sphere_shape(radius: float = 1.0) -> Tuple['ParametricSurface', ...]:
+    return SphereSurface(radius=radius, uv0=Vector2(0, 0), uv1=Vector2(0.5, 0.5)), \
+           SphereSurface(radius=radius, uv0=Vector2(0.5, 0.5), uv1=Vector2(1.0, 1.0)), \
+           SphereSurface(radius=radius, uv0=Vector2(0.0, 0.5), uv1=Vector2(0.5, 1.0)), \
+           SphereSurface(radius=radius, uv0=Vector2(0.5, 0.0), uv1=Vector2(1.0, 0.5))
 
 
-def cylinder_shape(radius1: float = 1.0, radius2: float = 1.0, height: float = 1.0) -> Shape:
-    return BevelShape(tuple(p * radius1 for p in BEZIER_CIRCLE_POINTS),
-                      (Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.5 * BEZIER_ANCHOR_VAL * height),
+def cylinder_shape(radius1: float = 1.0, radius2: float = 1.0, height: float = 1.0) -> ParametricSurface:
+    return BevelSurface(tuple(p * radius1 for p in BEZIER_CIRCLE_POINTS),
+                        (Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.5 * BEZIER_ANCHOR_VAL * height),
                        Vector3(0.0, 0.0, (1.0 - 0.5 * BEZIER_ANCHOR_VAL) * height), Vector3(0.0, 0.0, height)),
-                      tuple(p * radius2 for p in BEZIER_CIRCLE_POINTS))
+                        tuple(p * radius2 for p in BEZIER_CIRCLE_POINTS))
 
 
 UTAH_TEAPOT_CONTROL_POINTS = \
@@ -603,6 +603,6 @@ UTAH_TEAPOT_CONTROL_POINTS = \
      Vector3(1.5, 0.0, 0.15))
 
 
-def utah_teapot_shape() -> Tuple[BezierPatch, ...]:
+def utah_teapot_shape() -> Tuple[BezierSurface, ...]:
     points = UTAH_TEAPOT_CONTROL_POINTS
-    return tuple(BezierPatch(points[idx * 16: (idx + 1) * 16]) for idx in range(len(points) // 16))
+    return tuple(BezierSurface(points[idx * 16: (idx + 1) * 16]) for idx in range(len(points) // 16))

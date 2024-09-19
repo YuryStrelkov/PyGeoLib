@@ -2,10 +2,10 @@ from ...common import TWO_PI, PI
 from ...Vectors.vector2 import Vector2
 from ...Vectors.vector3 import Vector3
 from math import sin, cos
-from .shape import Shape
+from .parametric_surface import ParametricSurface
 
 
-class Sphere(Shape):
+class SphereSurface(ParametricSurface):
     def __init__(self, radius: float = 1.0, uv0: Vector2 = None, uv1: Vector2 = None):
         super().__init__()
         self.radius = radius
@@ -46,8 +46,8 @@ class Sphere(Shape):
                f"\t\"uv1\"   :{self.uv1}\n" \
                f"}}"
 
-    def surface_orientation(self) -> float:
-        return 1.0
+    # def surface_orientation(self) -> float:
+    #     return 1.0
 
     def point(self, uv: Vector2) -> Vector3:
         u = TWO_PI * (self.uv0.x + uv.x * (self.uv1.x - self.uv0.x))

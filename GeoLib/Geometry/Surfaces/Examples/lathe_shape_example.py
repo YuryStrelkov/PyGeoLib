@@ -1,4 +1,4 @@
-from ..BezierShapes import LatheShape
+from ..Parametric import LatheSurface
 from matplotlib import pyplot as plt
 from ...Vectors import Vector3
 from ...common import PI
@@ -9,7 +9,7 @@ def lathe_shape_example():
               Vector3(0.0, 3.5, 2.0), Vector3(0.0, 3.0, 3.0), Vector3(0.0, 2.0, 4.0), Vector3(0.0, 2.0, 5.0),
               Vector3(0.0, 2.0, 6.0), Vector3(0.0, 3.0, 6.0))
 
-    shape = LatheShape(points)
+    shape = LatheSurface(points)
     shape.resolution = (32, 32)
     shape.lathe_angle = PI * 0.5
     shape.axis_offset = 1.0

@@ -2,10 +2,10 @@ from ...Vectors.vector2 import Vector2
 from ...Vectors.vector3 import Vector3
 from math import sin, cos, sqrt
 from ...common import TWO_PI
-from .shape import Shape
+from .parametric_surface import ParametricSurface
 
 
-class Helix(Shape):
+class HelixSurface(ParametricSurface):
     def __init__(self, radius1: float = 1.0, radius2: float = 1.0, height: float = 1.0, turns: float = 4):
         super().__init__()
         self.radius1 = radius1
@@ -36,6 +36,7 @@ class Helix(Shape):
     @turns.setter
     def turns(self, value: float) -> None:
         self._turns = float(value)
+        self.inner_oriented = self.turns > 0.0
 
     @property
     def height(self) -> float:

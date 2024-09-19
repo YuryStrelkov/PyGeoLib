@@ -3,7 +3,7 @@ from .common import NUMERICAL_ACCURACY
 from .Matrices.matrix4 import Matrix4
 from .Vectors import Vector3, Vector4
 from .Bounds import BoundingBox
-from .Shapes import Ray
+from .Surfaces import Ray
 import math
 
 PERSPECTIVE_PROJECTION_MODE = 0

@@ -1,9 +1,9 @@
 from ..Meshes.obj_file_builder import build_meshes_obj_file, build_polygon_obj_file
-from ..Shapes.Curves import squares_marching_2d, triangulate_polygons
+from ..Surfaces.Curves import squares_marching_2d, triangulate_polygons
 from ..Meshes.cubes_marching import cubes_marching
 from ..Meshes.mesh import Mesh
 from matplotlib import pyplot as plt
-from ..Shapes.Curves.bezier import BEZIER_CIRCLE_POINTS
+from ..Surfaces.Curves.bezier import BEZIER_CIRCLE_POINTS
 from ..Vectors import Vector2, Vector3
 from math import cos, sqrt
 from ..color import Color

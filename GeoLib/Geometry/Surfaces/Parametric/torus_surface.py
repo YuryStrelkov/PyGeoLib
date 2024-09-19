@@ -2,10 +2,10 @@ from ...Vectors.vector2 import Vector2
 from ...Vectors.vector3 import Vector3
 from ...common import TWO_PI
 from math import sin, cos
-from .shape import Shape
+from .parametric_surface import ParametricSurface
 
 
-class Torus(Shape):
+class TorusSurface(ParametricSurface):
     def __init__(self, radius1: float = 1.0, radius2: float = 1.0, turns: float = 1.0):
         super().__init__()
         self.radius1 = radius1
@@ -35,6 +35,7 @@ class Torus(Shape):
     @turns.setter
     def turns(self, value: float) -> None:
         self._turns = float(value)
+        self.inner_oriented =  self.turns > 0.0
 
     def __str__(self):
         return f"{{\n" \
@@ -46,8 +47,8 @@ class Torus(Shape):
                f"\t\"param\"   :{self.turns}\n" \
                f"}}"
 
-    def surface_orientation(self) -> float:
-        return 1.0 if self.turns > 0.0 else -1.0
+    # def surface_orientation(self) -> float:
+    #     return 1.0 if self.turns > 0.0 else -1.0
 
     @property
     def length(self) -> float:

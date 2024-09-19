@@ -1,6 +1,6 @@
 from typing import Tuple, List, TextIO, Iterable, Union
-from ..Shapes.BezierShapes.shape import Shape
-from ..Shapes.Curves import triangulate_polygon
+from ..Surfaces.Parametric.parametric_surface import ParametricSurface
+from ..Surfaces.Curves import triangulate_polygon
 from ..Meshes.cubes_marching import Mesh
 from ..Vectors.vector2 import Vector2
 from ..Vectors.vector3 import Vector3
@@ -36,7 +36,7 @@ def build_curve_obj_file(lines: Iterable[Iterable[Union[Vector3, Vector2]]], fil
         indices_shift += vert_count
 
 
-def build_obj_file(shapes: Tuple[Shape, ...], file: TextIO = None, triangulate: bool = False):
+def build_obj_file(shapes: Tuple[ParametricSurface, ...], file: TextIO = None, triangulate: bool = False):
     indices_shift = 0
     for shape_id, shape in enumerate(shapes):
         points_per_length, points_per_diam = shape.resolution

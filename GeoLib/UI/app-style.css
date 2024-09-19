@@ -1,0 +1,26 @@
+QFrame {
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 10px;
+    font: 14px;
+    font-family: Consolas;
+    padding: 0px;
+    margin: 0px;
+}
+
+QDoubleSpinBox {
+    font: 14px;
+    font-family: Consolas;
+    border-width: 2px;
+    padding: 0px;
+    margin: 0px;
+    min-width: 1.5em;
+    border: 2px solid gray;
+}
+
+QLabel{
+    border: 0px solid;
+    padding: 0px;
+    margin: 0px;
+}
+

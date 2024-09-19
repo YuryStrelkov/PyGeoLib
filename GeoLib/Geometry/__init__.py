@@ -9,7 +9,7 @@ from .common import NUMERICAL_ACCURACY, NUMERICAL_FORMAT_4F, NUMERICAL_FORMAT_8F
 from .common import DEG_TO_RAD, RAD_TO_DEG, parallel_range, fast_math, parallel, indent, set_indent_level
 from .Vectors import *
 from .Matrices import *
-from .Shapes import *
+from .Surfaces import *
 from .Transformations import *
 from .Bounds import *
 from .RayTracing import *

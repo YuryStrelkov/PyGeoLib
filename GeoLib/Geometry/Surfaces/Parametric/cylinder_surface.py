@@ -2,10 +2,10 @@ from ...Vectors.vector2 import Vector2
 from ...Vectors.vector3 import Vector3
 from ...common import TWO_PI
 from math import sin, cos
-from .shape import Shape
+from .parametric_surface import ParametricSurface
 
 
-class Cylinder(Shape):
+class CylinderSurface(ParametricSurface):
     def __init__(self, radius1: float = 1.0, radius2: float = 1.0, height: float = 1.0,
                  angle: float = TWO_PI, start_angle: float = 0.0):
         super().__init__()
@@ -38,6 +38,7 @@ class Cylinder(Shape):
     @angle.setter
     def angle(self, value: float) -> None:
         self._angle = float(value)
+        self.inner_oriented = self.angle > 0.0
 
     @property
     def start_angle(self) -> float:
@@ -66,8 +67,8 @@ class Cylinder(Shape):
                f"\t\"height\"  :{self.height}\n" \
                f"}}"
 
-    def surface_orientation(self) -> float:
-        return 1.0 if self.angle > 0.0 else -1.0
+    # def surface_orientation(self) -> float:
+    #     return 1.0 if self.angle > 0.0 else -1.0
 
     @property
     def length(self) -> float:

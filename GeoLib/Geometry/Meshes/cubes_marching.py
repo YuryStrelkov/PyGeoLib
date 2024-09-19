@@ -424,7 +424,6 @@ def cubes_marching(field: Union[Callable[[float, float, float], float], np.ndarr
                     vertices.append((v - min_bound) * scaler)
                 face.append(unique_vertices[v])
             faces.append(tuple(face))
-
     mesh = Mesh()
     mesh.vertices = tuple(vertices)
     mesh.faces = tuple(faces)

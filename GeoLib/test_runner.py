@@ -27,6 +27,9 @@ def convert_to_bezier(points: Union[List[Vector3], Tuple[Vector3, ...]], anchor:
 
 
 if __name__ == '__main__':
+    cube_marching_example()
+    # shape_to_obj_file_example()
+    exit(1)
     radius = 3.0
 
     points0 = [Vector3(0.0, radius,        0.0),

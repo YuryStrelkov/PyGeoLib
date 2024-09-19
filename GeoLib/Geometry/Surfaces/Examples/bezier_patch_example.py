@@ -1,4 +1,4 @@
-from ..BezierShapes import utah_teapot_shape, box_shape, sphere_shape, spring_shape, DRAW_NORMALS, cylinder_shape
+from ..Parametric import utah_teapot_shape, box_shape, sphere_shape, spring_shape, DRAW_NORMALS, cylinder_shape
 from matplotlib import pyplot as plt
 
 

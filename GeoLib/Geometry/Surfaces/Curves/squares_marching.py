@@ -80,6 +80,28 @@ def _array_of_points_wrapper(array: np.ndarray, min_bound: Vector2, max_bound: V
                                             array, 1.0, 1.0)
 
 
+# def _collect_squares(field: Callable[[float, float], float],
+#                      min_bound: Tuple[float, float], max_bound: Tuple[float, float],
+#                      march_resolution: Tuple[int, int], threshold: float):
+#     rows, cols = max(march_resolution[1], 3), max(march_resolution[0], 3)
+#     cols_ = cols - 1
+#     rows_ = cols - 1
+#     dx = (max_bound[0] - min_bound[0]) / cols_
+#     dy = (max_bound[1] - min_bound[1]) / rows_
+#     min_bound_y = min_bound[0]
+#     min_bound_x = min_bound[1]
+#     shape: List[Tuple[Tuple[float, float], Tuple[float, float]]] = []
+#     for index in parallel_range(cols_ * rows_):
+#         row_index, col_index = divmod(index, cols_)
+#         row = row_index * dy + min_bound_y
+#         col = col_index * dx + min_bound_x
+#         field_values = _eval_field_function(field, col, row, dx, dy)
+#         state = _compute_state(field_values, threshold)
+#         if state in _SECTIONS_CONNECTION_ALGORYTHM:
+#             a, b, c, d = _squares_linear_interp(col, row, dx, dy, *field_values, threshold)
+#             _SECTIONS_CONNECTION_ALGORYTHM[state](shape, a, b, c, d)
+
+
 @parallel
 def _march_squares_2d(field: Callable[[float, float], float],
                       min_bound: Tuple[float, float], max_bound: Tuple[float, float],

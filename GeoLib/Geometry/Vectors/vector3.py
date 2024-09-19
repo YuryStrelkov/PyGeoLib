@@ -11,7 +11,6 @@ class Vector3:
     mutable vector 3d
     """
     # __slots__ = ('_x', '_y', '_z')
-
     _x: float
     _y: float
     _z: float

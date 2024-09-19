@@ -1,6 +1,6 @@
 from ..common import TWO_PI
-from ..Shapes.Curves import triangulate_polygon
-from ..Shapes import BevelShape, Shape, LatheShape, Cylinder
+from ..Surfaces.Curves import triangulate_polygon
+from ..Surfaces import BevelSurface, ParametricSurface, LatheSurface, CylinderSurface
 from ..Vectors import Vector3, Vector2
 from matplotlib import pyplot as plt
 from typing import Union, Tuple, List
@@ -84,7 +84,7 @@ class Mesh:
         return p1, p2, p3, p4
 
     @classmethod
-    def _build_mesh_from_shape(cls, shape: Shape, indices_shift: int = 0, triangulate: bool = False) -> 'Mesh':
+    def _build_mesh_from_shape(cls, shape: ParametricSurface, indices_shift: int = 0, triangulate: bool = False) -> 'Mesh':
         rows, cols = shape.resolution
         n_points = rows * cols
         uvs = []
@@ -144,7 +144,7 @@ class Mesh:
     @classmethod
     def bevel_mesh(cls, resolution, start_shape, path_shape, end_shape=None,
                    params_mask: int = BEVEL_CUP) -> Tuple['Mesh', ...]:
-        shape = BevelShape(start_shape, path_shape, end_shape)
+        shape = BevelSurface(start_shape, path_shape, end_shape)
         shape.resolution = resolution
         mesh = Mesh._build_mesh_from_shape(shape, 0, (params_mask & MESH_TRIANGULATE) != 0)
         meshes = [mesh]
@@ -160,7 +160,7 @@ class Mesh:
     @classmethod
     def lathe_mesh(cls, resolution, profile, start_angle: float = .0, end_angle: float = TWO_PI, shift: float = .0,
                    params_mask: int = LATHE_CUP) -> Tuple['Mesh', ...]:
-        shape = LatheShape(profile)
+        shape = LatheSurface(profile)
         shape.resolution = resolution
         shape.axis_offset = shift
         shape.lathe_angle = end_angle - start_angle
@@ -174,7 +174,7 @@ class Mesh:
             points = tuple(shape.point(Vector2(dv * index, 1.0)) for index in range(shape.resolution[0]))
             meshes.append(Mesh._make_cup(points))
         if params_mask & LATHE_CUP_INTERNAL:
-            cyl_shape = Cylinder()
+            cyl_shape = CylinderSurface()
             cyl_shape.start_angle = shape.start_angle
             cyl_shape.angle = shape.lathe_angle
             cyl_shape.radius2 = cyl_shape.radius1 = shape.axis_offset
