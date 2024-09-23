@@ -46,9 +46,6 @@ class SphereSurface(ParametricSurface):
                f"\t\"uv1\"   :{self.uv1}\n" \
                f"}}"
 
-    # def surface_orientation(self) -> float:
-    #     return 1.0
-
     def point(self, uv: Vector2) -> Vector3:
         u = TWO_PI * (self.uv0.x + uv.x * (self.uv1.x - self.uv0.x))
         v = PI * (self.uv0.y + uv.y * (self.uv1.y - self.uv0.y))

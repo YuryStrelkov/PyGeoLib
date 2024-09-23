@@ -1,6 +1,5 @@
 from typing import Tuple, Generator, Callable, TypeVar, Iterable
 from ...Transformations import Transform3d, Transform2d
-from ...Matrices.matrix4 import Matrix4
 from ...Vectors.vector2 import Vector2
 from ...Vectors.vector3 import Vector3
 from matplotlib import pyplot as plt
@@ -46,6 +45,38 @@ class ParametricSurface:
         self._resolution = (32, 32)
         self._inner_oriented = True
         self._triangulate = True
+
+    def _obj_format(self, surface_id: int = 0, indices_shift: int = 0) -> str:
+        header = f"#\n# object shape{surface_id}\n#"
+        vertices = '\n'.join(f"v  {vec.x:4.6} {vec.y:4.6} {vec.z:4.6}" for vec in self.positions)
+        n_vertices = f"# {self.vertices_count} vertices"
+        normals = '\n'.join(f"vn {vec.x:4.6} {vec.y:4.6} {vec.z:4.6}" for vec in self.normals)
+        n_normals = f"# {self.normals_count} normals"
+        uvs = '\n'.join(f"vt {vec.x:4.6} {vec.y:4.6}" for vec in self.uvs)
+        n_uvs = f"# {self.uvs_count} texture coordinates"
+        if self.triangulate:
+            faces = '\n'.join(f"f {p1 + 1}/{p1 + 1}/{p1 + 1}"
+                              f" {p3 + 1}/{p3 + 1}/{p3 + 1}"
+                              f" {p2 + 1}/{p2 + 1}/{p2 + 1}" for p1, p2, p3 in self.triangle_faces(indices_shift))
+            n_faces = f"# {self.triangles_count} triangle faces"
+        else:
+            faces = '\n'.join(f"f {p1}/{p1}/{p1}"
+                              f" {p4}/{p4}/{p4}"
+                              f" {p3}/{p3}/{p3}"
+                              f" {p2}/{p2}/{p2}" for p1, p2, p3, p4 in self.quad_faces(indices_shift))
+            n_faces = f"# {self.quades_count} quad faces"
+        all_stuff = (header, vertices, n_vertices, normals, n_normals, uvs, n_uvs, faces, n_faces)
+        return '\n'.join(stuff for stuff in all_stuff)
+
+    def __str__(self) -> str:
+        return f"{self:txt}"
+
+    def __format__(self, format_spec) -> str:
+        match format_spec:
+            case 'json': return self._obj_format()
+            case 'obj': return self._obj_format()
+            case 'txt': return self._obj_format()
+            case _: return self._obj_format()
 
     @property
     def vertices_count(self) -> int:
@@ -221,6 +252,42 @@ class ParametricSurface:
     def quades(self) ->  Generator[Tuple[int, int, int, int], None, None]:
         return self.quad_faces()
 
+    @property
+    def faces_array(self) -> np.ndarray:
+        return np.stack(tuple(f for f in self.triangles), dtype=int)
+
+    @property
+    def vertices_array(self) -> np.ndarray:
+        return np.stack(tuple((p.x, p.y, p.z) for p in self.positions), dtype=float)
+
+    @property
+    def normals_array(self) -> np.ndarray:
+        return np.stack(tuple((p.x, p.y, p.z) for p in self.normals), dtype=float)
+
+    @property
+    def tangents_array(self) -> np.ndarray:
+        return np.stack(tuple((p.x, p.y, p.z) for p in self.tangents), dtype=float)
+
+    @property
+    def bi_tangents_array(self) -> np.ndarray:
+        return np.stack(tuple((p.x, p.y, p.z) for p in self.bi_tangents), dtype=float)
+
+    @property
+    def world_space_vertices_array(self) -> np.ndarray:
+        return np.stack(tuple((p.x, p.y, p.z) for p in self.world_space_positions), dtype=float)
+
+    @property
+    def world_space_normals_array(self) -> np.ndarray:
+        return np.stack(tuple((p.x, p.y, p.z) for p in self.world_space_normals), dtype=float)
+
+    @property
+    def world_space_tangents_array(self) -> np.ndarray:
+        return np.stack(tuple((p.x, p.y, p.z) for p in self.world_space_tangents), dtype=float)
+
+    @property
+    def world_space_bi_tangents_array(self) -> np.ndarray:
+        return np.stack(tuple((p.x, p.y, p.z) for p in self.world_space_bi_tangents), dtype=float)
+
     @staticmethod
     def save_as_obj(file_name: str, surfaces: Iterable['ParametricSurface']):
         indices_shift = 0
@@ -258,43 +325,6 @@ class ParametricSurface:
     def point(self, uv: Vector2) -> Vector3:
         return Vector3(uv.x, 0.0, uv.y)
 
-    # move to helics / torus
-    @property
-    def basis_start(self) -> Matrix4:
-        o = 0.5 * (self.point(Vector2(0.0, 0.0)) + self.point(Vector2(0.0, 0.5)))
-        r = (self.point(Vector2(0.0, 0.0)) - o).normalize()
-        u = (self.point(Vector2(0.0, 0.25)) - o).normalize()
-        f = Vector3.cross(r, u)
-        return self.transform.transform_matrix * Matrix4.build_transform(r, f, u, o)
-
-    # move to helics / torus
-    @property
-    def basis_end(self) -> Matrix4:
-        o =  0.5 * (self.point(Vector2(1.0, 0.0)) + self.point(Vector2(1.0, 0.5)))
-        r = (self.point(Vector2(1.0, 0.0)) - o).normalize()
-        u = (self.point(Vector2(1.0, 0.25)) - o).normalize()
-        f = Vector3.cross(r, u)
-        return self.transform.transform_matrix * Matrix4.build_transform(r, f, u, o)
-
-    def build_shape_points(self) -> Tuple[np.ndarray, ...]:
-        us, vs = np.linspace(0.0, 1.0, self.resolution[0]), np.linspace(0.0, 1.0, self.resolution[1])
-        xs = []
-        ys = []
-        zs = []
-        for u in us:
-            x_row = []
-            y_row = []
-            z_row = []
-            xs.append(x_row)
-            ys.append(y_row)
-            zs.append(z_row)
-            for v in vs:
-                x, y, z = self.world_space_point(Vector2(u, v))
-                x_row.append(x)
-                y_row.append(y)
-                z_row.append(z)
-        return np.array(xs), np.array(ys), np.array(zs)
-
     def draw_shape_basis(self, axis=None, axis_length: float = 0.125):
         axis = axis if axis else plt.axes(projection='3d')
         basis = self.transform
@@ -331,14 +361,11 @@ class ParametricSurface:
     def draw_shape_gizmos(self, axis=None):
         return axis
 
-    def draw_shape(self, axis=None, args_mask: int = 0, show: bool = False, **kwargs):
+    def draw_shape(self, axis=None, args_mask: int = 0, show: bool = False):
         axis = axis if axis else plt.axes(projection='3d')
-        shape = self.build_shape_points()
-        if len(kwargs) != 0:
-            args = {k: v for k, v in kwargs.items() if k in {"linewidths", "antialiased", "color", "edgecolor", "alpha"}}
-        else:
-            args = {"linewidths": 0.0, "antialiased": True, "color": "white", "edgecolor": "none", "alpha": 1.0}
-        axis.plot_surface(*shape, **args)
+        faces = self.faces_array
+        vertices = self.world_space_vertices_array
+        axis.plot_trisurf(vertices[:, 0], vertices[:, 1], vertices[:, 2], triangles=faces, shade=True)
         axis.set_xlabel("x, [mm]")
         axis.set_ylabel("y, [mm]")
         axis.set_zlabel("z, [mm]")

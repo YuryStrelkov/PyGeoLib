@@ -47,9 +47,6 @@ class TorusSurface(ParametricSurface):
                f"\t\"param\"   :{self.turns}\n" \
                f"}}"
 
-    # def surface_orientation(self) -> float:
-    #     return 1.0 if self.turns > 0.0 else -1.0
-
     @property
     def length(self) -> float:
         return abs(TWO_PI * self.radius2 * self.turns)

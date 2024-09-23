@@ -1,5 +1,6 @@
 from ..Curves.bezier import BEZIER_CIRCLE_POINTS, BEZIER_ANCHOR_VAL
 from .bevel_surface import BevelSurface
+from ...Matrices import Matrix4
 from ...Transformations import Transform3d
 from ...Vectors import Vector3, Vector2
 from .bezier_surface import BezierSurface
@@ -8,6 +9,7 @@ from .parametric_surface import ParametricSurface
 from .helix_surface import HelixSurface
 from .torus_surface import TorusSurface
 from typing import Tuple
+
 
 PATCH_CONTROL_POINTS = (Vector3(-0.5, 0, -0.5),
                         Vector3(-0.1666, 0.0, -0.5),
@@ -27,18 +29,34 @@ PATCH_CONTROL_POINTS = (Vector3(-0.5, 0, -0.5),
                         Vector3(0.5, 0.0, 0.5))
 
 
+def _basis_start(surface: ParametricSurface) -> Matrix4:
+    o = 0.5 * (surface.point(Vector2(0.0, 0.0)) + surface.point(Vector2(0.0, 0.5)))
+    r = (surface.point(Vector2(0.0, 0.0)) - o).normalize()
+    u = (surface.point(Vector2(0.0, 0.25)) - o).normalize()
+    f = Vector3.cross(r, u)
+    return surface.transform.transform_matrix * Matrix4.build_transform(r, f, u, o)
+
+
+def _basis_end(surface: ParametricSurface) -> Matrix4:
+    o =  0.5 * (surface.point(Vector2(1.0, 0.0)) + surface.point(Vector2(1.0, 0.5)))
+    r = (surface.point(Vector2(1.0, 0.0)) - o).normalize()
+    u = (surface.point(Vector2(1.0, 0.25)) - o).normalize()
+    f = Vector3.cross(r, u)
+    return surface.transform.transform_matrix * Matrix4.build_transform(r, f, u, o)
+
+
 def spring_shape(radius1: float = 0.075, radius2: float = 1.0, radius3: float = 0.5,
                  height: float = 1.75, turns: float = 5.0, resolution=(256, 16)) -> Tuple[ParametricSurface, ...]:
     helix: HelixSurface = HelixSurface(radius1, radius2, height, turns)
     torus1: HelixSurface = HelixSurface(radius1, radius3, -0.075, -0.5)
     torus2: HelixSurface = HelixSurface(radius1, radius3, 0.075, 0.5)
-    torus1.transform.transform_matrix = helix.basis_start
-    torus2.transform.transform_matrix = helix.basis_end
+    torus1.transform.transform_matrix = _basis_start(helix)
+    torus2.transform.transform_matrix = _basis_end(helix)
     torus3: TorusSurface = TorusSurface(radius1, radius3, 0.8)
     torus4: TorusSurface = TorusSurface(radius1, radius3, -0.8)
-    torus3.transform.transform_matrix = torus2.basis_end
+    torus3.transform.transform_matrix = _basis_end(torus2)
     torus3.transform.angles += Vector3(0.0, 90.0, 0.0)
-    torus4.transform.transform_matrix = torus1.basis_end
+    torus4.transform.transform_matrix = _basis_end(torus1)
     torus4.transform.angles += Vector3(0.0, -90.0, 0.0)
     total_l = helix.length + torus1.length + torus2.length + torus3.length + torus4.length
     helix.resolution = (int(helix.length / total_l * resolution[0]), resolution[1])
@@ -84,7 +102,7 @@ def sphere_shape(radius: float = 1.0) -> Tuple['ParametricSurface', ...]:
 def cylinder_shape(radius1: float = 1.0, radius2: float = 1.0, height: float = 1.0) -> ParametricSurface:
     return BevelSurface(tuple(p * radius1 for p in BEZIER_CIRCLE_POINTS),
                         (Vector3(0.0, 0.0, 0.0), Vector3(0.0, 0.0, 0.5 * BEZIER_ANCHOR_VAL * height),
-                       Vector3(0.0, 0.0, (1.0 - 0.5 * BEZIER_ANCHOR_VAL) * height), Vector3(0.0, 0.0, height)),
+                        Vector3(0.0, 0.0, (1.0 - 0.5 * BEZIER_ANCHOR_VAL) * height), Vector3(0.0, 0.0, height)),
                         tuple(p * radius2 for p in BEZIER_CIRCLE_POINTS))
 
 

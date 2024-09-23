@@ -26,8 +26,14 @@ def convert_to_bezier(points: Union[List[Vector3], Tuple[Vector3, ...]], anchor:
     return tuple(bezier_points)
 
 
+from UI.ui_example import UIExample
+
+
 if __name__ == '__main__':
-    cube_marching_example()
+    # cube_marching_example()
+    UIExample.create_and_run()
+    a = np.array(tuple(f for f in ((1, 2, 3), (1, 2, 3), (1, 2, 3), (1, 2, 3))), dtype=int)
+
     # shape_to_obj_file_example()
     exit(1)
     radius = 3.0

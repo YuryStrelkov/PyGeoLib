@@ -149,18 +149,8 @@ class BezierSurface(ParametricSurface):
     def control_points(self) -> List[Vector3]:
         return self._controllers
 
-    # def normal(self, uv: Vector2) -> Vector3:
-    #     dpu = (self.point(Vector2(uv.x + NUMERICAL_ACCURACY, uv.y)) -
-    #            self.point(Vector2(uv.x - NUMERICAL_ACCURACY, uv.y))).normalize()
-    #     dpv = (self.point(Vector2(uv.x, uv.y + NUMERICAL_ACCURACY)) -
-    #            self.point(Vector2(uv.x, uv.y - NUMERICAL_ACCURACY))).normalize()
-    #     return Vector3.cross(dpu, dpv).normalize()
-
     def point(self, uv: Vector2) -> Vector3:
         return cubic_bezier_patch_position(*self._controllers, *uv)
-
-    # def surface_orientation(self) -> float:
-    #     return 1.0
 
     def draw_shape_gizmos(self, axis=None):
         axis = axis if axis else plt.axes(projection='3d')
