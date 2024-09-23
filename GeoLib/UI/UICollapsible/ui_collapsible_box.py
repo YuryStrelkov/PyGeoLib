@@ -3,6 +3,14 @@ from PyQt5.QtGui import QColor
 
 
 class CollapsibleBox(QtWidgets.QWidget):
+    """
+    |------------------------------------------------------------------------|
+    | Implements collapsible container widget.                               |
+    |------------------------------------------------------------------------|
+    | All code below was stollen from stackoverflow =)                       |
+    | I did not completely understood wtf goes here... but it works anyway =)|
+    |------------------------------------------------------------------------|
+    """
     def __init__(self, title="", parent=None, close_btn: bool = False):
         super(CollapsibleBox, self).__init__(parent)
 
