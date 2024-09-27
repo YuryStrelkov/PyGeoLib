@@ -16,10 +16,17 @@ NODES_MAP_COLORED = {-1: f"{C_ERROR}X{C_END}",
                      3: f"{C_SEA}[-]{C_END}"}
 
 NODES_MAP_HTML_COLORED = {
-                          0: "rgb(125 130 135)",
-                          1: "rgb(0 200 0)",
-                          2: "rgb(255 250 0)",
-                          3: "rgb(50 100 255)"}
+                          0: "rgba(125 130 135 1)",
+                          1: "rgba(0 200 0 1)",
+                          2: "rgba(255 250 0 1)",
+                          3: "rgba(50 100 255 1)"}
+
+NODES_MAP_HTML_TEXTURES = {
+                          0: "src-tex/mountain.jpg",
+                          1: "src-tex/land.jpg",
+                          2: "src-tex/coast.jpg",
+                          3: "src-tex/sea.jpg"}
+
 
 NODES_MAP_NAMES =  {
                           0: "MOUNTAIN",
@@ -197,6 +204,11 @@ class WFC2D_Map:
                         padding: 0;
                         background-color: black;
                     }}
+                    img {{
+                        width: 100%; /* or any custom size */
+                        height: 100%; 
+                        object-fit: contain;
+                    }}
                     .tooltip {{}}
                     .tooltip .tooltip-text {{
                       visibility: hidden;
@@ -229,6 +241,7 @@ class WFC2D_Map:
             col += 2
             color = NODES_MAP_HTML_COLORED[node.collapsed_value]
             tooltip = NODES_MAP_NAMES[node.collapsed_value]
+            texture = NODES_MAP_HTML_TEXTURES[node.collapsed_value]
             str_nodes.append(f"\t\t\t<div  class=\"tooltip\" style=\"position: absolute; "
                              f"top: {row}px; "
                              f"left: {col}px; "
@@ -236,6 +249,7 @@ class WFC2D_Map:
                              f"height: {c_h - 2}px; "
                              f"background-color: {color};\">"
                              f"<span class=\"tooltip-text\">{tooltip}</span>"
+                             f"<img src=\"{texture}\" alt=\"\" />"
                              f"</div>")
         nl = '\n'
         return f"{header}{nl.join(l for l in str_nodes)}{footer}"
