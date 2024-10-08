@@ -1,4 +1,4 @@
-from ..Meshes.obj_file_builder import build_meshes_obj_file, build_polygon_obj_file
+from ..Meshes.obj_file_builder import create_meshes_obj_file, create_polygon_obj_file
 from ..Surfaces.Curves import squares_marching_2d, triangulate_polygons
 from ..Meshes.cubes_marching import cubes_marching
 from ..Meshes.mesh import Mesh
@@ -32,7 +32,7 @@ def ear_clipping_example():
                                    (t.size, t.size), threshold=0.5, interpolate=True)
     polygons = triangulate_polygons(sections)
     with open("polygon shapes.obj", "wt") as shape:
-        build_polygon_obj_file(sections, shape)
+        create_polygon_obj_file(sections, shape)
 
     axes = plt.gca()
     cmap = tuple(c.matplotlib_color_code for c in Color.color_map_quadratic(len(sections)))
@@ -46,7 +46,7 @@ def ear_clipping_example():
 def cube_marching_example():
     mesh = cubes_marching(cubes_function, threshold=1.0)
     with open("cubes marching mesh.obj", "wt") as shape:
-        build_meshes_obj_file((mesh,), shape)
+        create_meshes_obj_file((mesh,), shape)
     mesh.draw()
     plt.gca().axis('equal')
     plt.show()
@@ -56,7 +56,7 @@ def shape_based_meshes_example():
     meshes = Mesh.bevel_mesh((32, 16), tuple(0.333 * p for p in BEZIER_CIRCLE_POINTS),
                              tuple(Vector3(p.x, 0.0, p.y) for p in BEZIER_CIRCLE_POINTS[:7]))
     with open("bevel_mesh.obj", "wt") as shape:
-        build_meshes_obj_file(meshes, shape)
+        create_meshes_obj_file(meshes, shape)
     axis = None
     for mesh in meshes:
         axis = mesh.draw(axis)
@@ -67,7 +67,7 @@ def shape_based_meshes_example():
 def lathe_shape_meshes_example():
     meshes = Mesh.lathe_mesh((32, 16), (Vector3(0, 0, 0), Vector3(1, 0, 0), Vector3(1, 0, 1), Vector3(0, 0, 1),), 3.1415, 1.0)
     with open("lathe_mesh.obj", "wt") as shape:
-        build_meshes_obj_file(meshes, shape)
+        create_meshes_obj_file(meshes, shape)
     axis = None
     for mesh in meshes:
         axis = mesh.draw(axis)

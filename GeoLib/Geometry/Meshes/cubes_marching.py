@@ -422,7 +422,8 @@ def cubes_marching(field: Union[Callable[[float, float, float], float], np.ndarr
                 if v not in unique_vertices:
                     unique_vertices.update({v: (vertex_counter := vertex_counter + 1)})
                     vertices.append((v - min_bound) * scaler)
-                face.append(unique_vertices[v])
+                vertex_id = unique_vertices[v]
+                face.append((vertex_id, vertex_id, vertex_id))  # pos / tex / nmr
             faces.append(tuple(face))
     mesh = Mesh()
     mesh.vertices = tuple(vertices)

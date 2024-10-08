@@ -1,9 +1,11 @@
-from typing import Tuple, List, TextIO, Iterable, Union
+import dataclasses
+from typing import Tuple, List, TextIO, Iterable, Union, Dict
 from ..Surfaces.Parametric.parametric_surface import ParametricSurface
 from ..Surfaces.Curves import triangulate_polygon
 from ..Meshes.cubes_marching import Mesh
 from ..Vectors.vector2 import Vector2
 from ..Vectors.vector3 import Vector3
+from ..Bounds import BoundingBox
 
 
 def calc_indices(index: int, stride: int, shift: int) -> Tuple[int, ...]:
@@ -15,7 +17,7 @@ def calc_indices(index: int, stride: int, shift: int) -> Tuple[int, ...]:
     return p1, p2, p3, p4
 
 
-def build_curve_obj_file(lines: Iterable[Iterable[Union[Vector3, Vector2]]], file: TextIO = None):
+def create_curve_obj_file(lines: Iterable[Iterable[Union[Vector3, Vector2]]], file: TextIO = None):
     indices_shift = 0
     for shape_id, shape in enumerate(lines):
         print("#", file=file)
@@ -36,7 +38,7 @@ def build_curve_obj_file(lines: Iterable[Iterable[Union[Vector3, Vector2]]], fil
         indices_shift += vert_count
 
 
-def build_obj_file(shapes: Tuple[ParametricSurface, ...], file: TextIO = None, triangulate: bool = False):
+def create_obj_file(shapes: Tuple[ParametricSurface, ...], file: TextIO = None, triangulate: bool = False):
     indices_shift = 0
     for shape_id, shape in enumerate(shapes):
         points_per_length, points_per_diam = shape.resolution
@@ -90,7 +92,7 @@ def build_obj_file(shapes: Tuple[ParametricSurface, ...], file: TextIO = None, t
         indices_shift += n_points
 
 
-def build_polygon_obj_file(polygons: Iterable[List[Vector2]], file: TextIO = None):
+def create_polygon_obj_file(polygons: Iterable[List[Vector2]], file: TextIO = None):
     indices_shift = 0
     for polygon_id, polygon_raw in enumerate(polygons):
         polygon = triangulate_polygon(polygon_raw)
@@ -118,7 +120,7 @@ def build_polygon_obj_file(polygons: Iterable[List[Vector2]], file: TextIO = Non
         indices_shift += len(polygon.uvs)
 
 
-def build_meshes_obj_file(meshes: Iterable[Mesh], file: TextIO = None):
+def create_meshes_obj_file(meshes: Iterable[Mesh], file: TextIO = None):
     indices_shift = 0
     for mesh_id, mesh in enumerate(meshes):
         if any(v is None for v in (mesh.uvs, mesh.vertices, mesh.faces, mesh.normals)):
@@ -141,16 +143,99 @@ def build_meshes_obj_file(meshes: Iterable[Mesh], file: TextIO = None):
         print(f"g shape{mesh_id}", file=file)
         if mesh.triangulated:
             for index, (p1, p2, p3) in enumerate(mesh.faces):
-                p1 += indices_shift + 1
-                p2 += indices_shift + 1
-                p3 += indices_shift + 1
-                print(f"f {p1}/{p1}/{p1} {p3}/{p3}/{p3} {p2}/{p2}/{p2}", file=file)
+                p1 = tuple(p + indices_shift + 1 for p in p1)
+                p2 = tuple(p + indices_shift + 1 for p in p2)
+                p3 = tuple(p + indices_shift + 1 for p in p3)
+                print(f"f {'/'.join(str(p) for p in p1)} "
+                      f"{'/'.join(str(p) for p in p3)} "
+                      f"{'/'.join(str(p) for p in p2)}",
+                      file=file)
         else:
             for index, (p1, p2, p3, p4) in enumerate(mesh.faces):
-                p1 += indices_shift + 1
-                p2 += indices_shift + 1
-                p3 += indices_shift + 1
-                p4 += indices_shift + 1
-                print(f"f {p1}/{p1}/{p1} {p4}/{p4}/{p4} {p3}/{p3}/{p3} {p2}/{p2}/{p2}", file=file)
+                p1 = tuple(p + indices_shift + 1 for p in p1)
+                p2 = tuple(p + indices_shift + 1 for p in p2)
+                p3 = tuple(p + indices_shift + 1 for p in p3)
+                p4 = tuple(p + indices_shift + 1 for p in p4)
+                print(f"f {'/'.join(str(p) for p in p1)} "
+                      f"{'/'.join(str(p) for p in p4)} "
+                      f"{'/'.join(str(p) for p in p3)} "
+                      f"{'/'.join(str(p) for p in p2)}", file=file)
+                # print(f"f {p1}/{p1}/{p1} {p4}/{p4}/{p4} {p3}/{p3}/{p3} {p2}/{p2}/{p2}", file=file)
         indices_shift += len(mesh.vertices)
 
+
+def _parce_face(face_str: str, indices_shift: Tuple[int, ...]) -> \
+        Tuple[Tuple[int, ...], Tuple[int, ...], Tuple[int, ...]]:
+    f1, f2, f3 = face_str.split(' ')[-3:]
+    f1 = tuple(int(v) - shift - 1 if len(v) != 0 else 0 for v, shift in zip(f1.split('/'), indices_shift))
+    f2 = tuple(int(v) - shift - 1 if len(v) != 0 else 0 for v, shift in zip(f2.split('/'), indices_shift))
+    f3 = tuple(int(v) - shift - 1 if len(v) != 0 else 0 for v, shift in zip(f3.split('/'), indices_shift))
+    return f1, f2, f3
+
+
+def read_obj_files(file_path: str) -> Dict[str, Mesh]:
+    @dataclasses.dataclass
+    class ObjMesh:
+        def __init__(self):
+            self.vertices = []
+            self.normals = []
+            self.faces = []
+            self.uvs = []
+            self.bounds = BoundingBox()
+
+    mesh = None
+    meshes = {}
+    meshes_raw = {}
+    indices_shift = (0, 0, 0)
+    with open(file_path, 'rt') as input_file:
+        for line in input_file:
+            line = line.replace('\n', '')
+            line = line.rstrip()
+            line = line.lstrip()
+            if 'object' in line:
+                new_shift = (len(mesh.vertices), len(mesh.uvs), len(mesh.normals)) if mesh else (0, 0, 0)
+                indices_shift = tuple(a + b for a, b in zip(indices_shift, new_shift))
+                mesh = ObjMesh()
+                meshes_raw.update({line.split(' ')[-1]: mesh})
+                continue
+            if line.startswith('v '):
+                x, y, z = line.split(' ')[-3:]
+                vertex = Vector3(x, y, z)
+                mesh.vertices.append(vertex)
+                mesh.bounds.encapsulate(vertex)
+                continue
+            if line.startswith('vt'):
+                x, y = line.split(' ')[-2:]
+                mesh.uvs.append(Vector2(x, y))
+                continue
+            if line.startswith('vn'):
+                x, y, z = line.split(' ')[-3:]
+                mesh.normals.append(Vector3(x, y, z))
+                continue
+            if line.startswith('f'):
+                mesh.faces.append(_parce_face(line, indices_shift))
+                continue
+        for m_name, m_data in meshes_raw.items():
+            m = Mesh()
+            m.faces = tuple(m_data.faces)
+            m.vertices = tuple(m_data.vertices)
+            m.uvs = tuple(m_data.uvs)
+            m.normals = tuple(m_data.normals)
+            m.bounds = m_data.bounds
+            if len(m_data.uvs) != len(m_data.vertices) and len(m_data.uvs) != 0:
+                uvs = []
+                for (_, uv1, _,), (_, uv2, _,), (_, uv3, _,) in m_data.faces:
+                    uvs.append(m.uvs[uv1])
+                    uvs.append(m.uvs[uv2])
+                    uvs.append(m.uvs[uv3])
+                m.uvs = tuple(uvs)
+
+            if len(m_data.normals) != len(m_data.vertices) and len(m_data.normals) != 0:
+                normals = []
+                for (_, _, n1), (_, _, n2), (_, _, n3) in m_data.faces:
+                    normals.append(m.normals[n1])
+                    normals.append(m.normals[n2])
+                    normals.append(m.normals[n3])
+                m.normals = tuple(normals)
+            meshes.update({m_name: m})
+    return meshes

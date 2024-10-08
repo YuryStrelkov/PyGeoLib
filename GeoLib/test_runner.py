@@ -6,7 +6,7 @@ from Geometry import bevel_shape_example, bezier_path_example, torus_example, \
     helix_example, lathe_shape_example, shape_to_obj_file_example, squares_marching_example, \
     ear_clipping_example, cube_marching_example, surfaces_tracing_test, tracing_2d_test, tracing_3d_test, \
     shape_based_meshes_example, lathe_shape_meshes_example, Vector3, bezier_interpolate_pt_3d, Mesh, PI, \
-    build_meshes_obj_file
+    create_meshes_obj_file
 
 
 def convert_to_bezier(points: Union[List[Vector3], Tuple[Vector3, ...]], anchor: float = 0.25):
@@ -81,7 +81,7 @@ if __name__ == '__main__':
     meshes = (*shape1, *shape2, *shape3, *shape4, *shape5, *shape6)
 
     with open("lamp_mesh.obj", "wt") as shape:
-        build_meshes_obj_file(meshes, shape)
+        create_meshes_obj_file(meshes, shape)
 
     axis = None
     for mesh in meshes:

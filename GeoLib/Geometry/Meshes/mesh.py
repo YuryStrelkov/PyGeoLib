@@ -1,9 +1,11 @@
+import numpy as np
+from ..Bounds import BoundingBox
 from ..common import TWO_PI
 from ..Surfaces.Curves import triangulate_polygon
 from ..Surfaces import BevelSurface, ParametricSurface, LatheSurface, CylinderSurface
 from ..Vectors import Vector3, Vector2
 from matplotlib import pyplot as plt
-from typing import Union, Tuple, List
+from typing import Union, Tuple, List, Dict
 from ..Matrices import Matrix4
 import math
 
@@ -18,15 +20,60 @@ BEVEL_CUP = BEVEL_CUP_START | BEVEL_CUP_END
 MESH_TRIANGULATE = 32
 
 
+def unique_edges(faces: Tuple[Tuple[Tuple[int, ...], ...], ...]) -> Tuple[Tuple[int, int], ...]:
+    edges_dict: Dict[Tuple[int, int], int] = {}
+    for (f1, _, _), (f2, _, _), (f3, _, _) in faces:
+        for v1, v2 in zip((f1, f2, f3), (f2, f3, f1)):
+            pair = (v1, v2) if v1 < v2 else (v2, v1)
+            if pair in edges_dict:
+                edges_dict[pair] += 1
+            else:
+                edges_dict.update({pair: 1})
+    return tuple(edge for edge, count in edges_dict.items() if count == 1)
+
+
 class Mesh:
-    __slots__ = ('vertices', 'uvs', 'faces', 'normals', 'triangulated')
+    __slots__ = ('_name', 'vertices', 'uvs', 'faces', 'normals', '_triangulated', 'bounds')
 
     def __init__(self):
-        self.triangulated = True
+        self._name = f"mesh_{id(self)}"
+        self._triangulated = True
         self.vertices: Union[Tuple[Vector3], None] = None
-        self.faces: Union[Tuple[Tuple[int, ...]], None] = None
+        self.faces: Union[Tuple[Tuple[Tuple[int, ...], ...]], None] = None
         self.uvs: Union[Tuple[Vector3], None] = None
         self.normals: Union[Tuple[Vector3], None] = None
+        self.bounds: Union[BoundingBox, None] = None
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    @name.setter
+    def name(self, value: str) -> None:
+        if isinstance(value, str):
+            self._name = value
+
+    @property
+    def triangulated(self) -> bool:
+        return self._triangulated
+
+    @triangulated.setter
+    def triangulated(self, value: bool) -> None:
+        if isinstance(value, bool):
+            self._triangulated = value
+
+    @property
+    def border(self) -> Tuple[Tuple[Vector3, Vector3], ...]:
+        edges = unique_edges(self.faces)
+        return tuple((self.vertices[p1 - 1], self.vertices[p2 - 1]) for p1, p2 in edges)
+
+    @property
+    def vertices_array(self) -> np.ndarray:
+        return np.array(tuple((v.x, v.y, v.z) for v in self.vertices), dtype=float)
+
+    @property
+    def faces_array(self) -> np.ndarray:
+        return np.array(tuple((f1[0], f2[0], f3[0]) for f1, f2, f3 in self.faces), dtype=int)
 
     def compute_uvs(self) -> None:
         if self.vertices is None:
@@ -58,21 +105,51 @@ class Mesh:
                     pt_per_normal.update({idx: normal})
         self.normals = tuple(pt_per_normal[idx] for idx in range(len(self.vertices)))
 
-    def draw(self, axis=None, color="k"):
+    def draw(self, axis=None, show: bool = True):
+        axis = axis if axis else plt.axes(projection='3d')
+        faces = self.faces_array
+        vertices = self.vertices_array
+        axis.plot_trisurf(vertices[:, 0], vertices[:, 1], vertices[:, 2], triangles=faces, shade=True)
+        axis.set_xlabel("x, [mm]")
+        axis.set_ylabel("y, [mm]")
+        axis.set_zlabel("z, [mm]")
+        if show:
+            axis.set_aspect('equal', 'box')
+            plt.show()
+        return axis
+
+    def draw_wire_frame(self, axis=None, color="k", show: bool = True):
         axis = axis if axis else plt.axes(projection='3d')
         if self.triangulated:
             for face in self.faces:
-                i1, i2, i3 = face
+                (i1, _, _), (i2, _, _), (i3, _, _) = face
                 p1, p2, p3 = self.vertices[i1], self.vertices[i2], self.vertices[i3]
                 axis.plot((p1.x, p2.x, p3.x, p1.x), (p1.y, p2.y, p3.y, p1.y), (p1.z, p2.z, p3.z, p1.z), color)
         else:
             for face in self.faces:
-                i1, i2, i3, i4 = face
+                (i1, _, _), (i2, _, _), (i3, _, _), (i4, _, _) = face
                 p1, p2, p3, p4 = self.vertices[i1], self.vertices[i2], self.vertices[i3], self.vertices[i4]
                 axis.plot((p1.x, p2.x, p3.x, p4.x, p1.x),
                           (p1.y, p2.y, p3.y, p4.y, p1.y),
                           (p1.z, p2.z, p3.z, p4.z, p1.z), color)
+        if show:
+            axis.set_aspect('equal', 'box')
+            plt.show()
         return axis
+
+    def align_2_center(self) -> None:
+        center = self.bounds.center * Vector3(1, 0, 1)
+        if (center - Vector3(0, 0, 0)).magnitude <  1e-6:
+            return  # centered
+
+        for v in self.vertices:
+            v -= center
+
+        _min = self.bounds.min - center
+        _max = self.bounds.max - center
+        self.bounds = BoundingBox()
+        self.bounds.encapsulate(_min)
+        self.bounds.encapsulate(_max)
 
     @staticmethod
     def _calc_indices(index: int, stride: int, shift: int) -> Tuple[int, ...]:
@@ -84,7 +161,8 @@ class Mesh:
         return p1, p2, p3, p4
 
     @classmethod
-    def _build_mesh_from_shape(cls, shape: ParametricSurface, indices_shift: int = 0, triangulate: bool = False) -> 'Mesh':
+    def _build_mesh_from_shape(cls, shape: ParametricSurface, indices_shift: int = 0,
+                               triangulate: bool = False) -> 'Mesh':
         rows, cols = shape.resolution
         n_points = rows * cols
         uvs = []
@@ -98,22 +176,22 @@ class Mesh:
             if shape.surface_orientation() > 0.0:
                 for index in range((rows - 1) * (cols - 1)):
                     p1, p2, p3, p4 = Mesh._calc_indices(index, cols, indices_shift)
-                    faces.append((p1, p3, p2))
-                    faces.append((p1, p4, p3))
+                    faces.append(((p1, p1, p1), (p3, p3, p3), (p2, p2, p2)))
+                    faces.append(((p1, p1, p1), (p4, p4, p4), (p3, p3, p3)))
             else:
                 for index in range((rows - 1) * (cols - 1)):
                     p1, p2, p3, p4 = Mesh._calc_indices(index, cols, indices_shift)
-                    faces.append((p1, p2, p3))
-                    faces.append((p1, p3, p4))
+                    faces.append(((p1, p1, p1), (p2, p2, p2), (p3, p3, p3)))
+                    faces.append(((p1, p1, p1), (p3, p3, p3), (p4, p4, p4)))
         else:
             if shape.surface_orientation() > 0.0:
                 for index in range((rows - 1) * (cols - 1)):
                     p1, p2, p3, p4 = Mesh._calc_indices(index, cols, indices_shift)
-                    faces.append((p1, p4, p3, p2))
+                    faces.append(((p1, p1, p1), (p4, p4, p4), (p3, p3, p3), (p2, p2, p2)))
             else:
                 for index in range((rows - 1) * (cols - 1)):
                     p1, p2, p3, p4 = Mesh._calc_indices(index, cols, indices_shift)
-                    faces.append((p1, p2, p3, p4))
+                    faces.append(((p1, p1, p1), (p2, p2, p2), (p3, p3, p3), (p4, p4, p4)))
         # return positions, normals, uvs, faces
         mesh = cls()
         mesh.triangulated = triangulate

@@ -1,3 +1,5 @@
+import time
+
 from matplotlib import pyplot as plt
 
 from Geometry import Transform2d, Vector2, TWO_PI
@@ -46,6 +48,7 @@ def graphic(n_points: int = 256) -> Tuple[Vector2, ...]:
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
+
     t1, t2 = make_transforms_pair(Vector2(0.5, 0.5), Vector2(.333, .333), 0.0)
     points = graphic()
     t1_points = transform_points(t1, points)
