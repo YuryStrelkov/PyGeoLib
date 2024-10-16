@@ -499,15 +499,15 @@ class Matrix4:
         _m12 = self._m12
         _m13 = self._m13
 
-        _m20 = self._m20
-        _m21 = self._m21
-        _m22 = self._m22
-        _m23 = self._m23
-
-        _m30 = self._m30
-        _m31 = self._m31
-        _m32 = self._m32
-        _m33 = self._m33
+        # _m20 = self._m20
+        # _m21 = self._m21
+        # _m22 = self._m22
+        # _m23 = self._m23
+#
+        # _m30 = self._m30
+        # _m31 = self._m31
+        # _m32 = self._m32
+        # _m33 = self._m33
 
         self.m00 = det *  (_m11 * a2323 - _m12 * a1323 + _m13 * a1223)
         self.m01 = det * -(_m01 * a2323 - _m02 * a1323 + _m03 * a1223)
