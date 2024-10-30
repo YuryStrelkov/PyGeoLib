@@ -4,6 +4,8 @@ from .obj_file_builder import create_polygon_obj_file
 from .obj_file_builder import create_curve_obj_file
 from .obj_file_builder import create_meshes_obj_file
 from .obj_file_builder import read_obj_files
+from .obj_file_builder import write_obj_files
+from .obj_file_builder import write_stl
 from .meshes_examples import cube_marching_example
 from .meshes_examples import ear_clipping_example
 from .obj_file_builder import create_obj_file

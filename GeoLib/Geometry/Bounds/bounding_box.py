@@ -15,8 +15,8 @@ class BoundingBox:
     def __str__(self):
         return f"{{\n" \
                f"\t\"min\": {self.min},\n" \
-               f"\t\"max\": {self.max}" \
-               f"\n}}"
+               f"\t\"max\": {self.max}\n" \
+               f"}}"
 
     @property
     def points(self) -> Generator[Vector3, None, None]:

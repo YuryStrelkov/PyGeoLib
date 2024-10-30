@@ -274,7 +274,7 @@ class Quaternion:
 
     def rotate(self, vector: Vector3) -> Vector3:
         assert isinstance(vector, Vector3)
-        quat = (self * Quaternion(0.0, vector.x, vector.y, vector.z)) * self.invert()
+        quat = (self * Quaternion(0.0, vector.x, vector.y, vector.z)) * self.inverted
         return Vector3(quat.ex, quat.ey, quat.ez)
 
     def to_rotation_matrix(self) -> Matrix4:

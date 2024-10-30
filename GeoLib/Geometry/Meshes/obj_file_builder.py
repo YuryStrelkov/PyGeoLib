@@ -121,7 +121,7 @@ def create_polygon_obj_file(polygons: Iterable[List[Vector2]], file: TextIO = No
 
 
 def create_meshes_obj_file(meshes: Iterable[Mesh], file: TextIO = None):
-    indices_shift = 0
+    indices_shift = (1, 1, 1)
     for mesh_id, mesh in enumerate(meshes):
         if any(v is None for v in (mesh.uvs, mesh.vertices, mesh.faces, mesh.normals)):
             continue
@@ -135,41 +135,40 @@ def create_meshes_obj_file(meshes: Iterable[Mesh], file: TextIO = None):
         for uv in mesh.uvs:
             print(f"vt {uv.x:4.6} {uv.y:4.6}", file=file)
         print(f"# {len(mesh.uvs)} texture coords", file=file)
-
         for n in mesh.normals:
             print(f"vn {n.x:4.6} {n.y:4.6} {n.z:4.6}", file=file)
         print(f"# {len(mesh.normals)} vertex normals", file=file)
-
         print(f"g shape{mesh_id}", file=file)
         if mesh.triangulated:
             for index, (p1, p2, p3) in enumerate(mesh.faces):
-                p1 = tuple(p + indices_shift + 1 for p in p1)
-                p2 = tuple(p + indices_shift + 1 for p in p2)
-                p3 = tuple(p + indices_shift + 1 for p in p3)
+                p1 = tuple(p + shift for p, shift in zip(p1, indices_shift))
+                p2 = tuple(p + shift for p, shift in zip(p2, indices_shift))
+                p3 = tuple(p + shift for p, shift in zip(p3, indices_shift))
                 print(f"f {'/'.join(str(p) for p in p1)} "
-                      f"{'/'.join(str(p) for p in p3)} "
-                      f"{'/'.join(str(p) for p in p2)}",
+                      f"{'/'.join(str(p) for p in p2)} "
+                      f"{'/'.join(str(p) for p in p3)}",
                       file=file)
         else:
             for index, (p1, p2, p3, p4) in enumerate(mesh.faces):
-                p1 = tuple(p + indices_shift + 1 for p in p1)
-                p2 = tuple(p + indices_shift + 1 for p in p2)
-                p3 = tuple(p + indices_shift + 1 for p in p3)
-                p4 = tuple(p + indices_shift + 1 for p in p4)
+                p1 = tuple(p + shift for p, shift in zip(p1, indices_shift))
+                p2 = tuple(p + shift for p, shift in zip(p2, indices_shift))
+                p3 = tuple(p + shift for p, shift in zip(p3, indices_shift))
+                p4 = tuple(p + shift for p, shift in zip(p4, indices_shift))
                 print(f"f {'/'.join(str(p) for p in p1)} "
                       f"{'/'.join(str(p) for p in p4)} "
                       f"{'/'.join(str(p) for p in p3)} "
                       f"{'/'.join(str(p) for p in p2)}", file=file)
                 # print(f"f {p1}/{p1}/{p1} {p4}/{p4}/{p4} {p3}/{p3}/{p3} {p2}/{p2}/{p2}", file=file)
-        indices_shift += len(mesh.vertices)
+        indices_shift = tuple(
+            a + b for a, b in zip(indices_shift, (len(mesh.vertices), len(mesh.uvs), len(mesh.normals))))
 
 
 def _parce_face(face_str: str, indices_shift: Tuple[int, ...]) -> \
         Tuple[Tuple[int, ...], Tuple[int, ...], Tuple[int, ...]]:
     f1, f2, f3 = face_str.split(' ')[-3:]
-    f1 = tuple(int(v) - shift - 1 if len(v) != 0 else 0 for v, shift in zip(f1.split('/'), indices_shift))
-    f2 = tuple(int(v) - shift - 1 if len(v) != 0 else 0 for v, shift in zip(f2.split('/'), indices_shift))
-    f3 = tuple(int(v) - shift - 1 if len(v) != 0 else 0 for v, shift in zip(f3.split('/'), indices_shift))
+    f1 = tuple(int(v) - shift if len(v) != 0 else 0 for v, shift in zip(f1.split('/'), indices_shift))
+    f2 = tuple(int(v) - shift if len(v) != 0 else 0 for v, shift in zip(f2.split('/'), indices_shift))
+    f3 = tuple(int(v) - shift if len(v) != 0 else 0 for v, shift in zip(f3.split('/'), indices_shift))
     return f1, f2, f3
 
 
@@ -186,7 +185,7 @@ def read_obj_files(file_path: str) -> Dict[str, Mesh]:
     mesh = None
     meshes = {}
     meshes_raw = {}
-    indices_shift = (0, 0, 0)
+    indices_shift = (1, 1, 1)
     with open(file_path, 'rt') as input_file:
         for line in input_file:
             line = line.replace('\n', '')
@@ -239,3 +238,26 @@ def read_obj_files(file_path: str) -> Dict[str, Mesh]:
                 m.normals = tuple(normals)
             meshes.update({m_name: m})
     return meshes
+
+
+def write_obj_files(file_path: str, meshes: Iterable[Mesh]):
+    with open(file_path, 'wt') as output_file:
+        create_meshes_obj_file(meshes, output_file)
+
+
+def write_stl(file_path: str, mesh: Mesh):
+    with open(file_path, "wt") as output_stl:
+        print(f"solid {mesh.name}", file=output_stl)
+        for face in mesh.faces:
+            normal = sum(mesh.normals[n_id] for (_, _,  n_id) in face).normalize()
+            v1, v2, v3 = tuple(mesh.vertices[v_id]for (v_id, _, _) in face)
+            print(f"  facet normal {normal.x:e} {normal.y:e} {normal.z:e}", file=output_stl)
+            print(f"    outer loop", file=output_stl)
+            print(f"      vertex {v1.x:e} {v1.y:e} {v1.z:e}", file=output_stl)
+            print(f"      vertex {v2.x:e} {v2.y:e} {v2.z:e}", file=output_stl)
+            print(f"      vertex {v3.x:e} {v3.y:e} {v3.z:e}", file=output_stl)
+            print(f"    endloop", file=output_stl)
+            print(f"  endfacet", file=output_stl)
+        print(f"endsolid {mesh.name}", file=output_stl)
+
+

@@ -5,7 +5,7 @@ from ..Surfaces.Curves import triangulate_polygon
 from ..Surfaces import BevelSurface, ParametricSurface, LatheSurface, CylinderSurface
 from ..Vectors import Vector3, Vector2
 from matplotlib import pyplot as plt
-from typing import Union, Tuple, List, Dict
+from typing import Union, Tuple, List, Dict, Callable
 from ..Matrices import Matrix4
 import math
 
@@ -43,6 +43,34 @@ class Mesh:
         self.uvs: Union[Tuple[Vector3], None] = None
         self.normals: Union[Tuple[Vector3], None] = None
         self.bounds: Union[BoundingBox, None] = None
+
+    def _prepare_dilatation(self):
+        offsets = dict()
+        for face in self.faces:
+            for v_id, _, n_id in face:
+                v = self.vertices[v_id]
+                n = self.normals[n_id]
+                if v not in offsets:
+                    offsets.update({v: [n]})
+                else:
+                    offsets[v].append(n)
+        return offsets
+
+    def _eval_dilatation(self, offsets, dilatation_function):
+        _min = self.bounds.min
+        _size = 1.0 / self.bounds.size
+        for v, ns in offsets.items():
+            v += sum(ns) * (dilatation_function((v - _min) * _size) / len(ns))
+
+    def dilatate(self, amount) -> 'Mesh':
+        if isinstance(amount, int) or isinstance(amount, float):
+            offsets = self._prepare_dilatation()
+            self._eval_dilatation(offsets, lambda v: amount)
+            return self
+        if isinstance(amount, Callable):
+            offsets = self._prepare_dilatation()
+            self._eval_dilatation(offsets, amount)
+        return self
 
     @property
     def name(self) -> str:
