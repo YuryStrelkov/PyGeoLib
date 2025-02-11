@@ -42,7 +42,7 @@ class UIExample(QMainWindow):
         self.setCentralWidget(container)
 
     @classmethod
-    def create_and_run(cls, style_sheets_path: str = "ui/app-style.css"):
+    def create_and_run(cls, style_sheets_path: str = "ui/app-style.CSS"):
         app = QApplication(sys.argv)
         try:
             with open(style_sheets_path, 'rt') as input_css:

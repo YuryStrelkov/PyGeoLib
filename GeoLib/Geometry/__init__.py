@@ -17,3 +17,4 @@ from .camera import Camera
 from .Numerics import *
 from .Meshes import *
 from .color import Color, create_color_rgb, create_color_rgba
+from .Html import *

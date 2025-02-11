@@ -242,7 +242,7 @@ class WFC2D_Map:
             color = NODES_MAP_HTML_COLORED[node.collapsed_value]
             tooltip = NODES_MAP_NAMES[node.collapsed_value]
             texture = NODES_MAP_HTML_TEXTURES[node.collapsed_value]
-            str_nodes.append(f"\t\t\t<div  class=\"tooltip\" style=\"position: absolute; "
+            str_nodes.append(f"\t\t\t<div class=\"tooltip\" style=\"position: absolute; "
                              f"top: {row}px; "
                              f"left: {col}px; "
                              f"width: {c_w - 2}px; "
